@@ -21,6 +21,12 @@ export const PERFORMANCE_LABELS: Record<PerformanceBand, string> = {
   continue_praticando: "Continue praticando",
 };
 
+export const PERFORMANCE_MESSAGES: Record<PerformanceBand, string> = {
+  excelente: "Você domina este assunto. Que tal tentar outro tema ou subir de nível?",
+  bom_caminho: "Você está no caminho. Revise as explicações das perguntas que errou e tente de novo.",
+  continue_praticando: "Leia com calma as explicações abaixo e refaça as perguntas que você errou.",
+};
+
 /** Nome exibido do tema; `null` é "Todos os temas". */
 export function themeLabel(theme: Theme | null): string {
   return theme === null ? ALL_THEMES_LABEL : THEME_LABELS[theme];

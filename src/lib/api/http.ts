@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation";
 import { ZodError } from "zod";
 import { sessionIdSchema } from "@/lib/validation";
 
@@ -36,8 +37,12 @@ export function json(data: unknown, status = 200, headers: Record<string, string
   return Response.json(data, { status, headers: { "Cache-Control": "no-store", ...headers } });
 }
 
-/** Converte qualquer erro em resposta JSON. Erros inesperados são logados e não vazam detalhes. */
+/**
+ * Converte qualquer erro em resposta JSON. Erros inesperados são logados e não vazam detalhes.
+ * Erros internos do Next (ex.: o sinal de "sair do prerender" ao ler request.url) são relançados, não tratados.
+ */
 export function toErrorResponse(error: unknown): Response {
+  unstable_rethrow(error);
   if (error instanceof ApiError) {
     return json({ error: { code: error.code, message: error.message } }, error.status, error.headers);
   }

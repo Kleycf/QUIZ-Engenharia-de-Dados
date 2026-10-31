@@ -1,25 +1,81 @@
 @import "tailwindcss";
 
+/*
+ * Tokens semânticos. Claro/escuro segue só prefers-color-scheme (RNF06).
+ * Contraste AA: texto ≥ 4.5:1 sobre background e card; bordas de estado ≥ 3:1.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --muted: #475569;
+  --card: #ffffff;
+  --border: #cbd5e1;
+  --code: #f1f5f9;
+  --accent: #4338ca;
+  --accent-foreground: #ffffff;
+  --accent-soft: #eef2ff;
+  --success: #15803d;
+  --success-border: #16a34a;
+  --success-soft: #f0fdf4;
+  --danger: #b91c1c;
+  --danger-border: #dc2626;
+  --danger-soft: #fef2f2;
+  --focus: #4338ca;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f172a;
+    --foreground: #f1f5f9;
+    --muted: #cbd5e1;
+    --card: #1e293b;
+    --border: #475569;
+    --code: #0f172a;
+    --accent: #a5b4fc;
+    --accent-foreground: #1e1b4b;
+    --accent-soft: #312e81;
+    --success: #86efac;
+    --success-border: #4ade80;
+    --success-soft: #14532d;
+    --danger: #fca5a5;
+    --danger-border: #f87171;
+    --danger-soft: #7f1d1d;
+    --focus: #a5b4fc;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-code: var(--code);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-success-border: var(--success-border);
+  --color-success-soft: var(--success-soft);
+  --color-danger: var(--danger);
+  --color-danger-border: var(--danger-border);
+  --color-danger-soft: var(--danger-soft);
+  --color-focus: var(--focus);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: light dark;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* Foco sempre visível para quem navega pelo teclado (RNF02). */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
 }
