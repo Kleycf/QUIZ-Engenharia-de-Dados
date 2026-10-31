@@ -1,0 +1,10 @@
+# Nunca enviar segredos locais no deploy pela CLI. As variáveis de produção ficam no painel da Vercel.
+.env*
+!.env.example
+
+# Artefatos locais: a Vercel instala e compila do zero.
+node_modules
+.next
+test-results
+playwright-report
+blob-report
