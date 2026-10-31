@@ -4,11 +4,10 @@ import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+// Extensão .ts explícita: este script roda direto no Node, sem bundler para resolver o import.
+import { LEVELS, THEMES, type Level, type Theme } from "../src/lib/quiz/domain.ts";
 
-export const THEMES = ["fundamentos_sql", "pipelines", "armazenamento", "big_data_cloud"] as const;
-export const LEVELS = ["iniciante", "intermediario"] as const;
-export type Theme = (typeof THEMES)[number];
-export type Level = (typeof LEVELS)[number];
+export { LEVELS, THEMES };
 
 /** Formato de cada pergunta nos arquivos JSON. */
 export interface SourceQuestion {
