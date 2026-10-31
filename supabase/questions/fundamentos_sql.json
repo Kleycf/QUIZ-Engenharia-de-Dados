@@ -1,0 +1,226 @@
+{
+  "iniciante": [
+    {
+      "id": "fsql-ini-01",
+      "statement": "Qual a principal diferença entre sistemas OLTP e OLAP?",
+      "answer": "OLTP atende muitas transações curtas; OLAP atende consultas analíticas sobre grandes volumes",
+      "distractors": [
+        "OLTP armazena os dados em colunas; OLAP armazena os dados sempre em linhas",
+        "OLTP só funciona em servidores locais; OLAP só funciona em serviços de nuvem",
+        "OLTP não aceita consultas em SQL; OLAP aceita consultas em SQL e em Python"
+      ],
+      "explanation": "Sistemas OLTP, como o banco de um e-commerce, atendem muitas operações pequenas e concorrentes, como inserir um pedido. Sistemas OLAP, como um data warehouse, são feitos para agregações sobre milhões de linhas. A opção sobre armazenamento inverte a realidade: o formato colunar é típico de OLAP."
+    },
+    {
+      "id": "fsql-ini-02",
+      "statement": "Qual é o papel de uma chave primária (*primary key*) em uma tabela relacional?",
+      "answer": "Identificar cada linha de forma única, sem valores nulos nem repetidos",
+      "distractors": [
+        "Ligar a tabela a outra tabela, apontando para um registro dela",
+        "Garantir que a tabela só possa ser lida por usuários autorizados",
+        "Acelerar as consultas que filtram por qualquer coluna da tabela"
+      ],
+      "explanation": "A chave primária garante unicidade e ausência de nulos, permitindo identificar cada registro sem ambiguidade. Apontar para um registro de outra tabela é o papel da chave estrangeira. Embora muitos bancos criem um índice para a chave primária, ela não acelera filtros em qualquer coluna."
+    },
+    {
+      "id": "fsql-ini-03",
+      "statement": "Em um modelo com as tabelas `clientes` e `pedidos`, para que serve a coluna `pedidos.cliente_id` declarada como chave estrangeira?",
+      "answer": "Garantir que cada pedido referencie um cliente que existe em `clientes`",
+      "distractors": [
+        "Garantir que cada cliente tenha no máximo um pedido registrado",
+        "Garantir que os pedidos sejam gravados na ordem de cadastro dos clientes",
+        "Garantir que o identificador do pedido seja único na tabela `pedidos`"
+      ],
+      "explanation": "A chave estrangeira impõe integridade referencial: o banco rejeita um pedido cujo `cliente_id` não exista em `clientes`. Ela não limita quantos pedidos um cliente pode ter, pois a relação típica é de um para muitos. A unicidade do identificador do pedido é papel da chave primária de `pedidos`."
+    },
+    {
+      "id": "fsql-ini-04",
+      "statement": "Qual a diferença entre `INNER JOIN` e `LEFT JOIN`?",
+      "answer": "O `LEFT JOIN` mantém todas as linhas da tabela da esquerda, mesmo sem correspondência",
+      "distractors": [
+        "O `LEFT JOIN` retorna apenas as linhas da esquerda que não têm correspondência",
+        "O `INNER JOIN` mantém todas as linhas das duas tabelas, com ou sem correspondência",
+        "O `INNER JOIN` exige que as duas tabelas tenham exatamente as mesmas colunas"
+      ],
+      "explanation": "O `INNER JOIN` retorna só as linhas com correspondência nas duas tabelas. O `LEFT JOIN` preserva todas as linhas da tabela da esquerda e preenche com `NULL` as colunas da direita quando não há correspondência. Retornar só as linhas sem correspondência exige um filtro extra, como `WHERE direita.id IS NULL`."
+    },
+    {
+      "id": "fsql-ini-05",
+      "statement": "Qual a diferença entre `WHERE` e `HAVING` em uma consulta com `GROUP BY`?",
+      "answer": "`WHERE` filtra linhas antes do agrupamento; `HAVING` filtra grupos depois da agregação",
+      "distractors": [
+        "`WHERE` filtra grupos depois da agregação; `HAVING` filtra linhas antes do agrupamento",
+        "`WHERE` só aceita colunas numéricas; `HAVING` aceita colunas de qualquer tipo de dado",
+        "`WHERE` e `HAVING` são sinônimos, e a escolha entre eles é só uma questão de estilo"
+      ],
+      "explanation": "O `WHERE` é aplicado linha a linha, antes de o `GROUP BY` formar os grupos, por isso não pode usar funções de agregação. O `HAVING` é avaliado depois da agregação e serve para condições como `HAVING COUNT(*) > 10`. A opção que inverte os dois descreve a ordem contrária da execução lógica."
+    },
+    {
+      "id": "fsql-ini-06",
+      "statement": "Uma tabela tem 100 linhas, e a coluna `email` está nula em 20 delas. O que retornam `COUNT(*)` e `COUNT(email)`?",
+      "answer": "`COUNT(*)` retorna 100 e `COUNT(email)` retorna 80",
+      "distractors": [
+        "`COUNT(*)` retorna 80 e `COUNT(email)` retorna 100",
+        "Os dois retornam 100, pois contam todas as linhas",
+        "Os dois retornam 80, pois ignoram as linhas nulas"
+      ],
+      "explanation": "`COUNT(*)` conta linhas, independentemente do conteúdo das colunas. `COUNT(coluna)` conta apenas os valores não nulos daquela coluna. Por isso, as 20 linhas com `email` nulo ficam de fora só no segundo caso."
+    },
+    {
+      "id": "fsql-ini-07",
+      "statement": "Qual é o principal objetivo da normalização em um modelo relacional?",
+      "answer": "Reduzir redundância e evitar anomalias de inserção, atualização e exclusão",
+      "distractors": [
+        "Acelerar as consultas analíticas que agregam dados de muitas tabelas",
+        "Converter as colunas de texto em colunas numéricas mais compactas",
+        "Juntar todos os dados em uma tabela larga para simplificar as consultas"
+      ],
+      "explanation": "A normalização separa os dados em tabelas para que cada fato fique registrado em um só lugar. Assim, alterar o endereço de um cliente exige mudar uma linha, e não centenas. Juntar tudo em uma tabela larga é desnormalizar, prática comum em modelos analíticos, mas que aumenta a redundância."
+    },
+    {
+      "id": "fsql-ini-08",
+      "statement": "Para que serve um índice em uma tabela de banco de dados?",
+      "answer": "Acelerar buscas por certas colunas, ao custo de mais espaço e escritas mais lentas",
+      "distractors": [
+        "Garantir que nenhuma coluna da tabela aceite valores nulos ou repetidos",
+        "Compactar a tabela inteira para que ela ocupe menos espaço em disco",
+        "Registrar o histórico de todas as alterações feitas em cada linha"
+      ],
+      "explanation": "Um índice é uma estrutura auxiliar, geralmente uma árvore B, que permite localizar linhas sem varrer a tabela inteira. Em troca, ocupa espaço e torna inserções e atualizações um pouco mais lentas, pois o índice também precisa ser mantido. Ele não impõe restrições de nulidade; isso é papel de `NOT NULL` e das chaves."
+    },
+    {
+      "id": "fsql-ini-09",
+      "statement": "O que faz a consulta abaixo?\n\n```sql\nSELECT DISTINCT cidade\nFROM clientes;\n```",
+      "answer": "Lista cada cidade uma única vez, sem repetições",
+      "distractors": [
+        "Lista apenas as cidades que aparecem uma única vez",
+        "Conta quantos clientes existem em cada uma das cidades",
+        "Lista as cidades em ordem alfabética, com repetições"
+      ],
+      "explanation": "`DISTINCT` elimina linhas duplicadas do resultado, então cada cidade aparece uma vez, não importa quantos clientes morem nela. Listar só as cidades que aparecem uma vez exigiria `GROUP BY cidade HAVING COUNT(*) = 1`. O `DISTINCT` também não garante ordenação; para isso é preciso `ORDER BY`."
+    },
+    {
+      "id": "fsql-ini-10",
+      "statement": "Qual condição seleciona corretamente as linhas em que a coluna `data_cancelamento` não foi preenchida?",
+      "answer": "`WHERE data_cancelamento IS NULL`",
+      "distractors": [
+        "`WHERE data_cancelamento = NULL`",
+        "`WHERE data_cancelamento = ''`",
+        "`WHERE data_cancelamento = 0`"
+      ],
+      "explanation": "Em SQL, `NULL` representa a ausência de valor, e qualquer comparação com `=` contra `NULL` resulta em desconhecido, nunca em verdadeiro. Por isso `= NULL` não retorna nenhuma linha. O operador correto é `IS NULL`, ou `IS NOT NULL` para o caso contrário."
+    }
+  ],
+  "intermediario": [
+    {
+      "id": "fsql-int-01",
+      "statement": "Três vendedores empatam com o maior valor de vendas. Qual a diferença entre `ROW_NUMBER()` e `RANK()` ordenando por vendas decrescentes?",
+      "answer": "`RANK()` dá 1 aos três e pula para 4; `ROW_NUMBER()` numera 1, 2 e 3",
+      "distractors": [
+        "`ROW_NUMBER()` dá 1 aos três e pula para 4; `RANK()` numera 1, 2 e 3",
+        "`RANK()` dá 1 aos três e segue em 2; `ROW_NUMBER()` numera 1, 2 e 3",
+        "As duas funções geram erro quando há empate no critério de ordem"
+      ],
+      "explanation": "`ROW_NUMBER()` sempre gera números sequenciais e únicos, desempatando de forma arbitrária. `RANK()` dá a mesma posição aos empatados e pula as posições seguintes, então o próximo recebe 4. Quem continua em 2 depois do empate é `DENSE_RANK()`."
+    },
+    {
+      "id": "fsql-int-02",
+      "statement": "Você precisa da venda mais recente de **cada** cliente. Qual abordagem resolve isso?",
+      "answer": "`ROW_NUMBER()` particionado por cliente, por data decrescente, mantendo o número 1",
+      "distractors": [
+        "`ORDER BY data DESC` seguido de `LIMIT 1` sobre a tabela de vendas inteira",
+        "`GROUP BY cliente` selecionando todas as colunas da venda junto com `MAX(data)`",
+        "`DISTINCT` sobre cliente e data, mantendo a primeira linha que for retornada"
+      ],
+      "explanation": "`ROW_NUMBER() OVER (PARTITION BY cliente ORDER BY data DESC)` numera as vendas de cada cliente separadamente, e o filtro `= 1` mantém só a mais recente. `LIMIT 1` sobre a tabela inteira traz uma única venda no total. Selecionar colunas fora do `GROUP BY` junto com `MAX(data)` é inválido na maioria dos bancos ou mistura valores de linhas diferentes."
+    },
+    {
+      "id": "fsql-int-03",
+      "statement": "O que a coluna `acumulado` calcula na consulta abaixo?\n\n```sql\nSELECT data, valor,\n  SUM(valor) OVER (ORDER BY data) AS acumulado\nFROM vendas_diarias;\n```",
+      "answer": "A soma de `valor` desde a primeira data até a data da linha atual",
+      "distractors": [
+        "A soma de `valor` de todas as datas, repetida em todas as linhas",
+        "A soma de `valor` só da data da linha atual e da data anterior",
+        "A média de `valor` desde a primeira data até a data da linha atual"
+      ],
+      "explanation": "Com `ORDER BY` dentro do `OVER`, a janela padrão vai do início da partição até a linha atual, o que produz um total acumulado. Sem o `ORDER BY`, o `SUM` usaria a partição inteira e repetiria o total geral em todas as linhas. Uma janela de duas linhas exigiria `ROWS BETWEEN 1 PRECEDING AND CURRENT ROW`."
+    },
+    {
+      "id": "fsql-int-04",
+      "statement": "A consulta abaixo deveria listar todos os clientes, mas os clientes sem pedidos sumiram. Por quê?\n\n```sql\nSELECT c.nome, p.valor\nFROM clientes c\nLEFT JOIN pedidos p ON p.cliente_id = c.id\nWHERE p.status = 'pago';\n```",
+      "answer": "O filtro no `WHERE` descarta as linhas em que `p.status` é `NULL`",
+      "distractors": [
+        "O `LEFT JOIN` só mantém os clientes que têm ao menos um pedido",
+        "A condição do `ON` deveria comparar `c.id` com a coluna `p.id`",
+        "O `SELECT` precisa incluir `p.cliente_id` para manter os clientes"
+      ],
+      "explanation": "Para clientes sem pedidos, o `LEFT JOIN` preenche as colunas de `pedidos` com `NULL`, e `NULL = 'pago'` não é verdadeiro, então o `WHERE` remove essas linhas. Na prática, o `LEFT JOIN` vira um `INNER JOIN`. A correção é mover a condição para o `ON`: `ON p.cliente_id = c.id AND p.status = 'pago'`."
+    },
+    {
+      "id": "fsql-int-05",
+      "statement": "Ao juntar `pedidos` (uma linha por pedido) com `itens_pedido` (várias linhas por pedido) e somar `pedidos.valor_frete`, o total de frete ficou maior que o real. Qual a causa?",
+      "answer": "O join repete cada pedido uma vez por item, e o frete é somado várias vezes",
+      "distractors": [
+        "O join deveria ser um `LEFT JOIN` para não somar o frete a mais",
+        "O `SUM` ignora os nulos e compensa somando os valores restantes",
+        "A soma de valores decimais perde precisão com muitas linhas"
+      ],
+      "explanation": "Em uma relação de um para muitos, cada linha de `pedidos` aparece tantas vezes quanto o número de itens, e a coluna de frete é duplicada junto. Somá-la depois do join multiplica o valor. A solução é agregar os itens antes do join ou somar o frete direto da tabela de pedidos. Trocar por `LEFT JOIN` não resolve, pois a duplicação continua."
+    },
+    {
+      "id": "fsql-int-06",
+      "statement": "A tabela `funcionarios(id, nome, depto_id, depto_nome)` viola a terceira forma normal (3FN). Por quê?",
+      "answer": "`depto_nome` depende de `depto_id`, e não diretamente da chave `id`",
+      "distractors": [
+        "`nome` pode se repetir entre funcionários diferentes da tabela",
+        "A tabela tem mais de uma coluna com o sufixo `_id` no nome",
+        "`id` deveria formar uma chave composta junto com `depto_id`"
+      ],
+      "explanation": "Na 3FN, toda coluna que não é chave deve depender só da chave primária, sem dependências transitivas. Aqui, `id` determina `depto_id`, que determina `depto_nome`, então o nome do departamento se repete para cada funcionário. A correção é mover `depto_nome` para uma tabela `departamentos`."
+    },
+    {
+      "id": "fsql-int-07",
+      "statement": "Uma consulta soma uma única coluna de uma tabela com 200 colunas e bilhões de linhas. Por que um banco colunar tende a ser mais rápido nesse caso?",
+      "answer": "Ele lê do disco só a coluna usada, em vez de ler as linhas inteiras",
+      "distractors": [
+        "Ele mantém automaticamente um índice em cada uma das 200 colunas",
+        "Ele guarda as linhas já ordenadas pela coluna que será somada",
+        "Ele dispensa a leitura do disco por manter tudo sempre em memória"
+      ],
+      "explanation": "No armazenamento colunar, os valores de cada coluna ficam juntos, então a consulta lê apenas a coluna somada e ignora as outras 199. Valores de uma mesma coluna também comprimem melhor, o que reduz ainda mais a leitura. Bancos orientados a linhas precisam ler cada linha inteira mesmo que só uma coluna interesse."
+    },
+    {
+      "id": "fsql-int-08",
+      "statement": "Existe um índice na coluna `data_pedido`, mas a consulta abaixo continua lenta. Qual a causa mais provável?\n\n```sql\nSELECT *\nFROM pedidos\nWHERE EXTRACT(YEAR FROM data_pedido) = 2024;\n```",
+      "answer": "Aplicar uma função à coluna impede o uso direto do índice",
+      "distractors": [
+        "Índices só funcionam em colunas numéricas, e não em datas",
+        "O `SELECT *` sempre impede o uso de qualquer índice",
+        "A comparação com um número inteiro desativa o índice"
+      ],
+      "explanation": "O índice guarda os valores de `data_pedido`, e não o ano extraído deles, então o banco precisa calcular a função em todas as linhas. Reescrever o filtro como intervalo, `data_pedido >= '2024-01-01' AND data_pedido < '2025-01-01'`, permite usar o índice. O `SELECT *` pode aumentar o custo de leitura, mas não impede a busca pelo índice."
+    },
+    {
+      "id": "fsql-int-09",
+      "statement": "A subconsulta abaixo retorna alguns valores `NULL`. O que acontece com o resultado?\n\n```sql\nSELECT nome\nFROM clientes\nWHERE id NOT IN (\n  SELECT cliente_id FROM pedidos\n);\n```",
+      "answer": "A consulta não retorna nenhuma linha",
+      "distractors": [
+        "A consulta ignora os nulos e funciona normalmente",
+        "A consulta retorna todos os clientes da tabela",
+        "A consulta falha com um erro de tipo de dado"
+      ],
+      "explanation": "`id NOT IN (1, 2, NULL)` equivale a `id <> 1 AND id <> 2 AND id <> NULL`, e a comparação com `NULL` resulta em desconhecido. Assim, nenhuma linha satisfaz a condição. Usar `NOT EXISTS` ou filtrar `cliente_id IS NOT NULL` na subconsulta evita o problema."
+    },
+    {
+      "id": "fsql-int-10",
+      "statement": "Você vai empilhar as vendas de 2023 e de 2024, que nunca se sobrepõem. Por que preferir `UNION ALL` a `UNION`?",
+      "answer": "`UNION ALL` não remove duplicatas, então evita uma ordenação ou hash caro",
+      "distractors": [
+        "`UNION ALL` garante que o resultado venha ordenado pela primeira coluna",
+        "`UNION` só funciona quando as duas consultas leem da mesma tabela",
+        "`UNION ALL` remove as duplicatas de forma mais eficiente que o `UNION`"
+      ],
+      "explanation": "`UNION` elimina linhas duplicadas, o que exige comparar todo o resultado, geralmente com ordenação ou hash. Como os dois anos não se sobrepõem, essa etapa é desperdício. `UNION ALL` apenas concatena os resultados e, sozinho, não garante nenhuma ordem."
+    }
+  ]
+}

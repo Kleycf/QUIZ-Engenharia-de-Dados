@@ -1,0 +1,226 @@
+{
+  "iniciante": [
+    {
+      "id": "bdc-ini-01",
+      "statement": "No Spark, qual a diferença entre uma transformação e uma ação?",
+      "answer": "Transformações só descrevem o plano; ações disparam a execução e retornam resultados",
+      "distractors": [
+        "Transformações executam na hora; ações só são executadas no fim do programa",
+        "Transformações leem os dados do disco; ações gravam os dados de volta no disco",
+        "Transformações rodam no *driver*; ações rodam nos *executors* do cluster"
+      ],
+      "explanation": "Operações como `filter`, `select` e `join` são transformações: o Spark apenas registra o que deve ser feito. Quando uma ação como `count`, `collect` ou `write` é chamada, ele otimiza o plano inteiro e executa o processamento. Esse comportamento é chamado de avaliação preguiçosa (*lazy evaluation*)."
+    },
+    {
+      "id": "bdc-ini-02",
+      "statement": "Qual é uma vantagem da avaliação preguiçosa (*lazy evaluation*) no Spark?",
+      "answer": "Otimizar o plano completo antes de executar, por exemplo aplicando filtros cedo",
+      "distractors": [
+        "Guardar automaticamente em memória o resultado de todas as transformações",
+        "Executar cada transformação assim que é escrita, para mostrar erros antes",
+        "Dispensar a distribuição dos dados entre as máquinas do cluster"
+      ],
+      "explanation": "Como nada é executado até uma ação, o Spark enxerga todas as etapas e pode reorganizá-las, por exemplo aplicando filtros logo na leitura para ler menos dados. Um efeito colateral é que erros de lógica só aparecem quando a ação é chamada. O cache em memória, por sua vez, precisa ser pedido explicitamente."
+    },
+    {
+      "id": "bdc-ini-03",
+      "statement": "Por que frameworks como o Spark dividem os dados em partições?",
+      "answer": "Para processar partes dos dados em paralelo em várias máquinas",
+      "distractors": [
+        "Para garantir que os dados fiquem ordenados em todas as etapas",
+        "Para impedir que duas tarefas leiam o mesmo arquivo de origem",
+        "Para criptografar cada parte com uma chave de segurança própria"
+      ],
+      "explanation": "Cada partição é processada por uma tarefa, e as tarefas rodam em paralelo nos *executors* do cluster. Assim, um volume que levaria horas em uma máquina é dividido entre dezenas delas. O número e o tamanho das partições afetam diretamente o desempenho."
+    },
+    {
+      "id": "bdc-ini-04",
+      "statement": "No Kafka, o que é um tópico?",
+      "answer": "Um fluxo nomeado de mensagens, no qual produtores gravam e consumidores leem",
+      "distractors": [
+        "Um banco relacional que guarda o estado atual de cada consumidor",
+        "Um servidor do cluster responsável por armazenar as mensagens",
+        "Uma consulta contínua que filtra as mensagens recebidas pelo cluster"
+      ],
+      "explanation": "Um tópico é uma categoria de mensagens, como `pedidos` ou `cliques`, que funciona como um log em que só se acrescentam registros. Produtores publicam mensagens nele, e consumidores as leem no próprio ritmo. O servidor que armazena as mensagens é chamado de *broker*."
+    },
+    {
+      "id": "bdc-ini-05",
+      "statement": "Diferente de uma fila tradicional, o que acontece com uma mensagem no Kafka depois de lida por um consumidor?",
+      "answer": "Ela continua no tópico até expirar pelo período de retenção configurado",
+      "distractors": [
+        "Ela é apagada assim que o primeiro consumidor confirma a leitura",
+        "Ela é movida para um tópico de arquivo morto do próprio cluster",
+        "Ela fica bloqueada para a leitura de qualquer outro consumidor"
+      ],
+      "explanation": "O Kafka guarda as mensagens por um tempo ou tamanho configurado, independentemente de terem sido lidas. Cada consumidor controla a própria posição de leitura, chamada *offset*. Por isso, vários sistemas podem ler o mesmo tópico, e é possível reprocessar mensagens antigas voltando o *offset*."
+    },
+    {
+      "id": "bdc-ini-06",
+      "statement": "Por que o armazenamento de objetos em nuvem é a base comum de data lakes?",
+      "answer": "Tem custo baixo por GB, alta durabilidade e cresce sem gerenciar discos",
+      "distractors": [
+        "Oferece transações ACID nativas entre vários arquivos ao mesmo tempo",
+        "Permite alterar poucos bytes no meio de um arquivo com baixa latência",
+        "Funciona como um banco relacional com índices em todas as colunas"
+      ],
+      "explanation": "O armazenamento de objetos cobra pouco por GB, replica os dados para alta durabilidade e escala praticamente sem limite. Em troca, os objetos são imutáveis e não há transações entre arquivos, por isso surgiram formatos como Delta Lake e Iceberg. Ele também separa o armazenamento do processamento, que pode ser ligado só quando necessário."
+    },
+    {
+      "id": "bdc-ini-07",
+      "statement": "O que significa separar armazenamento e processamento (*compute*) em uma plataforma de dados na nuvem?",
+      "answer": "Os dados ficam em um serviço, e o processamento escala ou desliga à parte",
+      "distractors": [
+        "Cada tabela fica em uma região diferente da nuvem para reduzir riscos",
+        "O processamento só lê dados que estejam no disco local da máquina",
+        "Os dados brutos e os tratados precisam ficar em provedores diferentes"
+      ],
+      "explanation": "Com armazenamento e processamento separados, os dados ficam em um serviço durável, e os clusters ou motores de consulta são ligados conforme a demanda. Isso permite desligar o processamento à noite sem perder dados e usar vários motores sobre a mesma cópia. No modelo acoplado, aumentar o armazenamento obrigava a comprar processamento junto, e vice-versa."
+    },
+    {
+      "id": "bdc-ini-08",
+      "statement": "Qual é a principal vantagem de usar um serviço de dados gerenciado na nuvem em vez de manter o mesmo software em servidores próprios?",
+      "answer": "O provedor cuida de instalação, atualizações e escala, reduzindo a operação",
+      "distractors": [
+        "O serviço gerenciado sempre custa menos, para qualquer volume de uso",
+        "O serviço gerenciado elimina a necessidade de modelar os dados",
+        "O serviço gerenciado dá acesso direto ao sistema operacional"
+      ],
+      "explanation": "Em um serviço gerenciado, tarefas como provisionar máquinas, aplicar atualizações, fazer backup e escalar ficam com o provedor. O time foca nos dados, e não na infraestrutura. Em troca, há menos controle sobre configurações, e o custo pode ser maior em alguns padrões de uso."
+    },
+    {
+      "id": "bdc-ini-09",
+      "statement": "Qual a diferença entre escalar vertical e horizontalmente?",
+      "answer": "Vertical é usar uma máquina mais potente; horizontal é adicionar mais máquinas",
+      "distractors": [
+        "Vertical é adicionar mais máquinas; horizontal é usar uma máquina mais potente",
+        "Vertical é aumentar o disco; horizontal é aumentar a memória da mesma máquina",
+        "Vertical vale para bancos de dados; horizontal vale só para servidores web"
+      ],
+      "explanation": "Escalar verticalmente significa trocar por uma máquina com mais CPU, memória ou disco, o que tem um limite físico e de custo. Escalar horizontalmente distribui o trabalho entre mais máquinas, que é o modelo de Spark e Kafka. A escala horizontal exige que o sistema saiba dividir os dados e coordenar as tarefas."
+    },
+    {
+      "id": "bdc-ini-10",
+      "statement": "Para que servem as partições de um tópico no Kafka?",
+      "answer": "Para distribuir as mensagens e permitir que vários consumidores leiam em paralelo",
+      "distractors": [
+        "Para separar as mensagens já lidas das mensagens que ainda não foram lidas",
+        "Para guardar cópias de segurança das mensagens em outro data center",
+        "Para ordenar todas as mensagens do tópico pelo horário de chegada"
+      ],
+      "explanation": "Um tópico é dividido em partições, que podem ficar em *brokers* diferentes e ser lidas por consumidores diferentes ao mesmo tempo. Isso permite escalar a leitura e a escrita. A ordem das mensagens é garantida apenas dentro de cada partição, e não no tópico inteiro."
+    }
+  ],
+  "intermediario": [
+    {
+      "id": "bdc-int-01",
+      "statement": "Quais operações no Spark normalmente causam *shuffle*, a redistribuição de dados entre as máquinas?",
+      "answer": "`groupBy` e `join`, que precisam juntar registros com a mesma chave",
+      "distractors": [
+        "`filter` e `select`, que leem as colunas de cada partição",
+        "`withColumn` e `cast`, que alteram o tipo de uma coluna",
+        "`limit` e `show`, que retornam poucas linhas ao *driver*"
+      ],
+      "explanation": "Para agrupar ou juntar por uma chave, todos os registros com a mesma chave precisam estar na mesma partição, o que exige movê-los pela rede. Esse é o *shuffle*, uma das etapas mais caras de um job. `filter`, `select` e `withColumn` atuam dentro de cada partição, sem trocar dados entre máquinas."
+    },
+    {
+      "id": "bdc-int-02",
+      "statement": "Em um join, uma tarefa do Spark leva 40 minutos enquanto as outras terminam em 1 minuto. Qual é a causa mais provável?",
+      "answer": "*Skew*: uma chave concentra boa parte dos registros em uma partição",
+      "distractors": [
+        "Falta de memória no *driver* para coletar o resultado final do join",
+        "Excesso de partições pequenas criadas na leitura dos arquivos",
+        "Uso de um formato colunar, como Parquet, na tabela de entrada"
+      ],
+      "explanation": "Quando uma chave, como um cliente genérico ou um valor nulo, aparece muito mais que as outras, a partição dela fica enorme e a tarefa correspondente vira o gargalo. Técnicas comuns são o *salting*, que espalha a chave quente em várias partições, e a execução adaptativa, que divide partições desbalanceadas. Excesso de partições pequenas gera sobrecarga geral, e não uma única tarefa lenta."
+    },
+    {
+      "id": "bdc-int-03",
+      "statement": "Você vai juntar uma tabela de 2 TB com uma tabela de países de 200 linhas. Qual estratégia de join evita o *shuffle* da tabela grande?",
+      "answer": "*Broadcast join*: enviar a tabela pequena a todos os *executors*",
+      "distractors": [
+        "*Sort-merge join*: ordenar as duas tabelas pela chave de junção",
+        "*Cross join*: combinar todas as linhas das duas tabelas entre si",
+        "*Shuffle hash join*: redistribuir as duas tabelas pela chave"
+      ],
+      "explanation": "No *broadcast join*, a tabela pequena é copiada inteira para cada *executor*, e cada partição da tabela grande é juntada localmente. Assim, os 2 TB não precisam ser movidos pela rede. *Sort-merge* e *shuffle hash join* redistribuem as duas tabelas, o que é muito mais caro nesse cenário."
+    },
+    {
+      "id": "bdc-int-04",
+      "statement": "Um tópico do Kafka tem 6 partições, e um *consumer group* tem 8 consumidores. O que acontece?",
+      "answer": "Seis consumidores recebem uma partição cada, e dois ficam ociosos",
+      "distractors": [
+        "Os oito consumidores dividem as seis partições em partes iguais",
+        "Cada mensagem é entregue a todos os oito consumidores do grupo",
+        "O Kafka cria duas partições extras para atender a todo o grupo"
+      ],
+      "explanation": "Dentro de um *consumer group*, cada partição é lida por no máximo um consumidor, para preservar a ordem. Com 6 partições, só 6 consumidores trabalham, e os outros ficam de reserva caso algum falhe. Para ganhar paralelismo, é preciso aumentar o número de partições do tópico."
+    },
+    {
+      "id": "bdc-int-05",
+      "statement": "Os eventos de cada pedido precisam ser processados na ordem em que ocorreram. Como garantir isso no Kafka sem abrir mão do paralelismo?",
+      "answer": "Usar o ID do pedido como chave, levando os eventos à mesma partição",
+      "distractors": [
+        "Usar um tópico com uma partição para cada consumidor do grupo",
+        "Usar chaves aleatórias para distribuir melhor a carga entre partições",
+        "Usar a data do evento como chave, agrupando os eventos do mesmo dia"
+      ],
+      "explanation": "O Kafka garante ordem apenas dentro de uma partição, e mensagens com a mesma chave vão sempre para a mesma partição. Usar o ID do pedido como chave mantém todos os eventos daquele pedido em ordem, enquanto pedidos diferentes são processados em paralelo. Chaves aleatórias espalham os eventos de um mesmo pedido e quebram a ordem."
+    },
+    {
+      "id": "bdc-int-06",
+      "statement": "Antes de gravar o resultado, você quer reduzir de 2.000 para 50 partições sem um *shuffle* completo. Qual operação usar no Spark?",
+      "answer": "`coalesce(50)`, que junta partições existentes sem redistribuir tudo",
+      "distractors": [
+        "`repartition(50)`, que redistribui os dados de forma uniforme",
+        "`cache()`, que guarda as partições em memória antes da escrita",
+        "`distinct()`, que elimina as partições com dados repetidos"
+      ],
+      "explanation": "O `coalesce` reduz o número de partições combinando as que já existem, evitando um *shuffle* completo. O `repartition` faz um *shuffle* e gera partições equilibradas, útil quando os dados estão desbalanceados ou quando é preciso aumentar o número de partições. Reduzir de 2.000 para 50 partições também evita milhares de arquivos pequenos na saída."
+    },
+    {
+      "id": "bdc-int-07",
+      "statement": "Em qual situação faz sentido usar `cache()` ou `persist()` em um DataFrame do Spark?",
+      "answer": "Quando o mesmo DataFrame será reutilizado por várias ações seguidas",
+      "distractors": [
+        "Quando o DataFrame será usado uma única vez, em uma ação de escrita",
+        "Sempre que o DataFrame for lido de arquivos no formato Parquet",
+        "Sempre, pois o cache acelera qualquer job sem nenhum custo extra"
+      ],
+      "explanation": "Sem cache, cada ação recalcula toda a cadeia de transformações desde a leitura. Guardar o resultado intermediário compensa quando ele alimenta várias ações, como diferentes agregações. Em uso único, o cache só consome memória, que pode faltar para outras etapas."
+    },
+    {
+      "id": "bdc-int-08",
+      "statement": "Um motor de consulta em nuvem cobra pelo volume de dados lido. Qual medida reduz mais o custo de uma consulta frequente?",
+      "answer": "Usar formato colunar, particionar pelos filtros e selecionar só as colunas usadas",
+      "distractors": [
+        "Converter os dados para CSV, que é mais simples de ler pelo motor de consulta",
+        "Usar `SELECT *` e descartar as colunas desnecessárias depois, na ferramenta de BI",
+        "Guardar todos os dados em um único arquivo grande para reduzir a listagem"
+      ],
+      "explanation": "Quando a cobrança é por dado lido, cada byte evitado é economia. Formatos colunares permitem ler só as colunas pedidas, e o particionamento descarta arquivos fora do filtro. `SELECT *` e CSV fazem o motor ler tudo, mesmo que a maior parte seja descartada depois."
+    },
+    {
+      "id": "bdc-int-09",
+      "statement": "Um job de *batch* noturno pode ser reiniciado se falhar e não tem prazo apertado. Qual opção de nuvem tende a reduzir mais o custo?",
+      "answer": "Instâncias *spot* ou preemptivas, com desconto e risco de interrupção",
+      "distractors": [
+        "Instâncias reservadas por três anos, para um uso de poucas horas por dia",
+        "Instâncias sob demanda de maior porte, para terminar o job mais rápido",
+        "Um cluster dedicado e sempre ligado, para evitar o tempo de inicialização"
+      ],
+      "explanation": "Instâncias *spot* usam capacidade ociosa do provedor com grandes descontos, mas podem ser retomadas a qualquer momento. Um job tolerante a falhas e sem prazo apertado aproveita bem esse modelo. Reservas longas e clusters sempre ligados pagam pela capacidade mesmo nas horas em que o job não roda."
+    },
+    {
+      "id": "bdc-int-10",
+      "statement": "Por que um filtro como `WHERE dt = '2024-05-01'` pode deixar muito mais rápida, no Spark, a leitura de dados particionados por `dt`?",
+      "answer": "O Spark lê só a pasta daquela partição e ignora as demais",
+      "distractors": [
+        "O Spark ordena os dados por data antes de aplicar o filtro",
+        "O Spark cria um índice temporário em `dt` antes da leitura",
+        "O Spark guarda o resultado em cache para as próximas leituras"
+      ],
+      "explanation": "Quando os dados estão gravados em pastas como `dt=2024-05-01`, o Spark usa o filtro para descartar as outras pastas antes de ler qualquer arquivo, técnica chamada *partition pruning*. Em vez de ler meses de dados, ele lê um único dia. Isso só funciona se o filtro for aplicado diretamente sobre a coluna de partição."
+    }
+  ]
+}

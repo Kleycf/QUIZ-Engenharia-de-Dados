@@ -1,0 +1,226 @@
+{
+  "iniciante": [
+    {
+      "id": "pipe-ini-01",
+      "statement": "Qual a diferença entre ETL e ELT?",
+      "answer": "No ELT, os dados são carregados brutos no destino e transformados lá dentro",
+      "distractors": [
+        "No ELT, os dados são transformados antes de sair do sistema de origem",
+        "No ETL, os dados são carregados no destino sem nenhuma transformação",
+        "ETL e ELT são nomes diferentes para o mesmo processo, sem distinção"
+      ],
+      "explanation": "No ETL, a transformação acontece antes da carga, em um servidor ou ferramenta intermediária. No ELT, os dados brutos são carregados primeiro, e a transformação roda dentro do próprio destino, como um data warehouse em nuvem. O ELT ganhou força porque esses destinos têm poder de processamento elástico."
+    },
+    {
+      "id": "pipe-ini-02",
+      "statement": "Qual cenário é mais adequado para processamento em *streaming*?",
+      "answer": "Detectar fraudes em transações de cartão segundos após cada compra",
+      "distractors": [
+        "Gerar o relatório financeiro consolidado do fechamento de cada mês",
+        "Recalcular uma vez por noite as métricas de vendas do dia anterior",
+        "Migrar uma única vez o histórico de dez anos para um novo banco"
+      ],
+      "explanation": "*Streaming* processa eventos continuamente, à medida que chegam, e é indicado quando a latência precisa ser de segundos. Detectar uma fraude depois que o cartão já foi usado várias vezes teria pouco valor. Relatórios mensais, cargas noturnas e migrações pontuais toleram horas de atraso e são casos típicos de *batch*."
+    },
+    {
+      "id": "pipe-ini-03",
+      "statement": "Um job diário de carga falhou no meio da execução e será reexecutado. Qual propriedade garante que a reexecução não duplique registros no destino?",
+      "answer": "Idempotência",
+      "distractors": [
+        "Paralelismo",
+        "Particionamento",
+        "Compressão"
+      ],
+      "explanation": "Um pipeline idempotente produz o mesmo resultado não importa quantas vezes seja executado com a mesma entrada, por exemplo com *MERGE/upsert* ou sobrescrevendo a partição do dia. Paralelismo e particionamento melhoram o desempenho, mas sozinhos não evitam duplicidade."
+    },
+    {
+      "id": "pipe-ini-04",
+      "statement": "No contexto de orquestração de *pipelines*, como no Airflow, o que é uma DAG?",
+      "answer": "Um grafo de tarefas com dependências, sem ciclos, que define a ordem de execução",
+      "distractors": [
+        "Um banco de dados especializado em guardar os resultados de cada tarefa",
+        "Uma linguagem de consulta usada para transformar os dados no pipeline",
+        "Um gatilho que executa todas as tarefas ao mesmo tempo, sem nenhuma ordem"
+      ],
+      "explanation": "DAG significa *Directed Acyclic Graph*, ou grafo acíclico dirigido. Cada nó é uma tarefa, e cada aresta indica que uma tarefa só começa depois da outra. A ausência de ciclos garante que a execução sempre tenha começo e fim."
+    },
+    {
+      "id": "pipe-ini-05",
+      "statement": "O que é CDC (*Change Data Capture*)?",
+      "answer": "Uma técnica que captura inserções, atualizações e exclusões da origem para replicá-las",
+      "distractors": [
+        "Uma técnica que compacta os dados alterados para reduzir o custo de armazenamento",
+        "Uma técnica que valida a qualidade dos dados antes de liberá-los para consumo",
+        "Uma técnica que copia a tabela inteira da origem a cada execução do pipeline"
+      ],
+      "explanation": "O CDC identifica só o que mudou na origem, muitas vezes lendo o log de transações do banco, e envia essas mudanças ao destino. Isso evita copiar a tabela inteira a cada execução, que é justamente a abordagem de carga completa. Também permite capturar exclusões, que uma consulta por data de atualização não enxerga."
+    },
+    {
+      "id": "pipe-ini-06",
+      "statement": "Qual a principal vantagem de uma carga incremental em relação a uma carga completa (*full load*)?",
+      "answer": "Processar apenas os registros novos ou alterados desde a última execução",
+      "distractors": [
+        "Garantir que as exclusões na origem sempre sejam refletidas no destino",
+        "Dispensar o controle de qual foi o último registro já processado",
+        "Recriar a tabela de destino do zero, eliminando inconsistências"
+      ],
+      "explanation": "A carga incremental lê só o que mudou, usando por exemplo uma coluna de data de atualização como marca d'água. Isso reduz tempo e custo à medida que a tabela cresce. Em troca, exige guardar até onde o processamento já foi, e exclusões na origem podem passar despercebidas sem técnicas como CDC."
+    },
+    {
+      "id": "pipe-ini-07",
+      "statement": "Qual destes é um exemplo de verificação de qualidade de dados em um pipeline?",
+      "answer": "Falhar a execução se a coluna `id_pedido` tiver valores nulos ou duplicados",
+      "distractors": [
+        "Aumentar o número de máquinas quando o volume de dados cresce muito",
+        "Agendar a execução do pipeline para o horário de menor uso do banco",
+        "Compactar os arquivos de saída para reduzir o espaço ocupado em disco"
+      ],
+      "explanation": "Verificações de qualidade testam se os dados atendem a expectativas, como unicidade, ausência de nulos, faixas de valores e volume esperado. Parar o pipeline ao detectar uma chave nula evita que dados ruins cheguem aos relatórios. As demais opções tratam de escalabilidade, agendamento e custo, e não de qualidade."
+    },
+    {
+      "id": "pipe-ini-08",
+      "statement": "O que significa fazer um *backfill* em um pipeline?",
+      "answer": "Reprocessar períodos passados, por exemplo após corrigir um bug ou criar um campo",
+      "distractors": [
+        "Apagar os dados antigos do destino para liberar espaço de armazenamento",
+        "Desfazer a última execução e restaurar o estado anterior do destino",
+        "Processar os dados em tempo real assim que chegam ao sistema de origem"
+      ],
+      "explanation": "*Backfill* é executar o pipeline para datas que já passaram, preenchendo ou corrigindo o histórico. É comum depois de corrigir uma regra de negócio ou ao incluir uma nova coluna que precisa de valores retroativos. Pipelines idempotentes e particionados por data tornam o *backfill* seguro."
+    },
+    {
+      "id": "pipe-ini-09",
+      "statement": "Uma tarefa falha por instabilidade momentânea na rede ao chamar uma API. Qual recurso do orquestrador ajuda nesse caso?",
+      "answer": "Novas tentativas automáticas (*retries*), com um intervalo entre elas",
+      "distractors": [
+        "Execução paralela da mesma tarefa em várias máquinas diferentes",
+        "Particionamento da tabela de destino pela data de processamento",
+        "Remoção da tarefa do fluxo para que as seguintes possam rodar"
+      ],
+      "explanation": "Falhas transitórias, como timeouts de rede, costumam desaparecer em segundos ou minutos. Configurar *retries* com espera, de preferência crescente, deixa o pipeline se recuperar sozinho. Para isso funcionar sem efeitos colaterais, a tarefa precisa ser idempotente."
+    },
+    {
+      "id": "pipe-ini-10",
+      "statement": "O que é a linhagem de dados (*data lineage*)?",
+      "answer": "O mapeamento de onde cada dado veio e por quais transformações passou",
+      "distractors": [
+        "O registro de quais usuários consultaram cada tabela e em que horário",
+        "A ordem cronológica em que as linhas foram inseridas em uma tabela",
+        "A lista de versões do código do pipeline no controle de versão"
+      ],
+      "explanation": "A linhagem mostra o caminho do dado da origem até o relatório, passando por cada tabela e transformação intermediária. Ela ajuda a investigar números errados e a medir o impacto de mudar uma coluna. O registro de quem consultou cada tabela é auditoria de acesso, um tema diferente."
+    }
+  ],
+  "intermediario": [
+    {
+      "id": "pipe-int-01",
+      "statement": "Um job diário grava as vendas de cada dia em uma tabela particionada por data. Qual estratégia torna segura a reexecução de um dia?",
+      "answer": "Sobrescrever a partição do dia processado, em vez de acrescentar linhas",
+      "distractors": [
+        "Acrescentar as linhas e remover as duplicatas uma vez por mês",
+        "Acrescentar as linhas e confiar que o job nunca será reexecutado",
+        "Gravar cada execução em uma tabela nova, com o horário no nome"
+      ],
+      "explanation": "Sobrescrever a partição torna a carga idempotente: reprocessar o dia substitui os dados em vez de duplicá-los. Remover duplicatas mensalmente deixa os relatórios errados durante semanas. Criar uma tabela por execução evita a duplicação, mas espalha os dados e complica o consumo."
+    },
+    {
+      "id": "pipe-int-02",
+      "statement": "Uma carga incremental usa `WHERE atualizado_em > ultima_execucao`. Alguns registros chegam à origem com atraso, já com um `atualizado_em` antigo. O que acontece com eles?",
+      "answer": "Nunca são capturados, pois já ficaram abaixo da marca d'água",
+      "distractors": [
+        "São capturados duas vezes, gerando duplicidade no destino",
+        "São rejeitados pelo banco de origem por violação de chave",
+        "Fazem a carga falhar, e o orquestrador refaz o período"
+      ],
+      "explanation": "A marca d'água só avança, então registros que aparecem depois com um timestamp anterior a ela ficam fora de todas as execuções seguintes. Uma mitigação comum é reprocessar uma janela de segurança, como as últimas 48 horas, com carga idempotente. Outra opção é usar CDC, que captura as mudanças pela ordem do log, e não pelo timestamp da linha."
+    },
+    {
+      "id": "pipe-int-03",
+      "statement": "Um consumidor de eventos garante entrega *at-least-once*. Como evitar que eventos reprocessados dupliquem dados no destino?",
+      "answer": "Gravar com *upsert* usando um identificador único do evento",
+      "distractors": [
+        "Aumentar o número de partições do tópico de eventos",
+        "Desativar as novas tentativas em caso de falha no consumo",
+        "Processar os eventos em lotes maiores e menos frequentes"
+      ],
+      "explanation": "Com *at-least-once*, o mesmo evento pode chegar mais de uma vez, por exemplo após uma falha antes de confirmar o *offset*. Usar o ID do evento como chave de um *upsert* torna o processamento idempotente, e a repetição não altera o resultado. Desativar as novas tentativas troca duplicidade por perda de dados."
+    },
+    {
+      "id": "pipe-int-04",
+      "statement": "Um pipeline diário filtra os dados pela data do relógio no momento da execução. Que problema isso causa em um *backfill* de janeiro feito em março?",
+      "answer": "Todas as execuções processam os dados de março, e não os dias de janeiro",
+      "distractors": [
+        "As execuções de janeiro rodam em paralelo e travam o banco de origem",
+        "O orquestrador recusa execuções com datas anteriores à data atual",
+        "As partições de janeiro são apagadas antes de serem reprocessadas"
+      ],
+      "explanation": "Se o filtro usa a hora real da execução, rodar o pipeline para 5 de janeiro em março processa os dados de março. Orquestradores fornecem uma data lógica, o intervalo a que aquela execução se refere, justamente para isso. Parametrizar o pipeline por essa data torna o *backfill* reproduzível."
+    },
+    {
+      "id": "pipe-int-05",
+      "statement": "A origem passou a enviar uma coluna nova, e o pipeline quebrou ao gravar no destino. Qual prática reduz esse risco?",
+      "answer": "Validar o esquema na entrada e definir como tratar colunas novas ou removidas",
+      "distractors": [
+        "Converter todas as colunas para texto antes de gravá-las no destino",
+        "Desativar as verificações de qualidade para não bloquear as cargas",
+        "Recriar a tabela de destino do zero a cada execução do pipeline"
+      ],
+      "explanation": "Mudanças de esquema na origem são inevitáveis, então o pipeline precisa detectá-las e aplicar uma política explícita, como aceitar colunas novas e alertar sobre remoções. Contratos de dados com os times de origem ajudam a antecipar essas mudanças. Converter tudo para texto esconde o problema e empurra erros de tipo para quem consome os dados."
+    },
+    {
+      "id": "pipe-int-06",
+      "statement": "Em um pipeline de *streaming* que conta cliques por janela de 5 minutos, para que serve uma *watermark*?",
+      "answer": "Definir até quando eventos atrasados ainda são aceitos na janela",
+      "distractors": [
+        "Garantir que cada evento seja entregue exatamente uma vez",
+        "Dividir os eventos entre os consumidores de forma equilibrada",
+        "Comprimir os eventos antes de enviá-los ao armazenamento"
+      ],
+      "explanation": "Eventos podem chegar fora de ordem, depois do fim da janela a que pertencem pelo horário em que ocorreram. A *watermark* estima até onde o tempo dos eventos já avançou e determina quanto atraso tolerar antes de fechar a janela. Um limite maior aceita mais atrasos, mas aumenta a latência e o estado mantido em memória."
+    },
+    {
+      "id": "pipe-int-07",
+      "statement": "Um app de celular envia eventos com horas de atraso quando o aparelho fica sem conexão. Para relatórios por dia em que a ação aconteceu, qual horário usar?",
+      "answer": "O horário do evento, registrado pelo aparelho quando a ação ocorreu",
+      "distractors": [
+        "O horário de processamento, quando o pipeline leu o evento da fila",
+        "O horário de ingestão, quando o servidor recebeu o evento do app",
+        "O horário da última atualização da tabela de destino do relatório"
+      ],
+      "explanation": "O horário do evento (*event time*) indica quando a ação realmente aconteceu, que é o que o relatório quer medir. Os horários de ingestão e de processamento refletem quando o dado chegou, e com o aparelho sem conexão podem estar horas ou dias depois. Usar o horário do evento exige lidar com eventos atrasados, mas evita atribuir ações ao dia errado."
+    },
+    {
+      "id": "pipe-int-08",
+      "statement": "Hoje a carga de pedidos trouxe 90% menos linhas que a média, sem nenhum erro técnico. Qual verificação teria detectado o problema?",
+      "answer": "Um teste de volume que compara a contagem com o histórico recente",
+      "distractors": [
+        "Um teste de unicidade sobre a chave primária da tabela de pedidos",
+        "Um teste de tipo que confirma que as datas estão em formato válido",
+        "Um teste de integridade entre os pedidos e a tabela de clientes"
+      ],
+      "explanation": "Falhas silenciosas, como uma origem que entrega dados parciais, não geram erro, então só um teste de volume ou de atualidade as percebe. Comparar a contagem com a média dos últimos dias e alertar abaixo de um limite é uma prática simples e eficaz. Os testes de unicidade, tipo e integridade passariam, pois as poucas linhas carregadas estavam corretas."
+    },
+    {
+      "id": "pipe-int-09",
+      "statement": "O pipeline B depende da tabela gerada pelo pipeline A, que às vezes atrasa. Qual abordagem é mais robusta?",
+      "answer": "Fazer B esperar um sinal de conclusão de A antes de começar",
+      "distractors": [
+        "Agendar B para uma hora depois do horário de início de A",
+        "Agendar B no mesmo horário de A, para ganhar tempo",
+        "Fazer B ler a tabela de A no estado em que ela estiver"
+      ],
+      "explanation": "Uma dependência explícita, por meio de um sensor, de um evento ou de uma DAG que encadeia os dois, garante que B só rode com os dados de A prontos. Uma folga fixa de uma hora funciona até o dia em que A atrasa mais que isso, e B processa dados incompletos sem avisar. Ler a tabela no estado em que estiver tem o mesmo problema."
+    },
+    {
+      "id": "pipe-int-10",
+      "statement": "Por que o CDC baseado em log costuma ser preferido ao CDC baseado em consultas por data de atualização?",
+      "answer": "Ele captura também as exclusões e gera pouca carga no banco de origem",
+      "distractors": [
+        "Ele dispensa qualquer acesso ou permissão no banco de dados de origem",
+        "Ele garante que o destino seja atualizado antes da própria origem",
+        "Ele funciona mesmo quando a origem não mantém nenhum tipo de log"
+      ],
+      "explanation": "O CDC baseado em log lê o log de transações do banco, onde ficam registradas inserções, atualizações e exclusões, sem executar consultas pesadas nas tabelas. Já a consulta por `atualizado_em` não enxerga linhas apagadas e depende de a coluna ser mantida corretamente. Em troca, o CDC por log exige permissões e configuração no banco de origem."
+    }
+  ]
+}

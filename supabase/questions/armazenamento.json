@@ -1,0 +1,226 @@
+{
+  "iniciante": [
+    {
+      "id": "arm-ini-01",
+      "statement": "Em um modelo dimensional, qual a diferença entre uma tabela fato e uma tabela dimensão?",
+      "answer": "A fato guarda eventos e métricas; a dimensão guarda o contexto descritivo deles",
+      "distractors": [
+        "A fato guarda o contexto descritivo; a dimensão guarda os eventos e as métricas",
+        "A fato guarda os dados brutos; a dimensão guarda os dados já agregados",
+        "A fato guarda os dados atuais; a dimensão guarda o histórico de alterações"
+      ],
+      "explanation": "A tabela fato registra eventos do negócio, como vendas, com métricas numéricas e chaves para as dimensões. As dimensões, como cliente, produto e data, trazem os atributos usados para filtrar e agrupar. Uma consulta típica soma métricas da fato agrupando por atributos das dimensões."
+    },
+    {
+      "id": "arm-ini-02",
+      "statement": "O que caracteriza um esquema estrela (*star schema*)?",
+      "answer": "Uma tabela fato central ligada diretamente a dimensões desnormalizadas",
+      "distractors": [
+        "Várias tabelas fato ligadas entre si, sem nenhuma tabela de dimensão",
+        "Dimensões normalizadas em várias tabelas, ligadas em cadeia à fato",
+        "Uma única tabela com todos os fatos e atributos do negócio juntos"
+      ],
+      "explanation": "No esquema estrela, a fato fica no centro, e cada dimensão é uma única tabela ligada a ela, lembrando uma estrela. Dimensões normalizadas em várias tabelas em cadeia caracterizam o esquema floco de neve (*snowflake*). A estrela exige menos joins e é mais simples de consultar."
+    },
+    {
+      "id": "arm-ini-03",
+      "statement": "O que é um data lake?",
+      "answer": "Um repositório que guarda dados brutos, estruturados ou não, a baixo custo",
+      "distractors": [
+        "Um banco relacional que só aceita dados já limpos e modelados em tabelas",
+        "Uma ferramenta de visualização para montar painéis a partir de vários bancos",
+        "Um sistema que replica um banco transacional para dar alta disponibilidade"
+      ],
+      "explanation": "Um data lake armazena arquivos em seu formato original, como CSV, JSON, imagens e Parquet, geralmente em armazenamento de objetos barato. O esquema é aplicado na leitura (*schema-on-read*), e não na escrita. Um data warehouse, por outro lado, exige dados estruturados e modelados antes da carga."
+    },
+    {
+      "id": "arm-ini-04",
+      "statement": "Qual é o principal propósito de um data warehouse?",
+      "answer": "Centralizar dados integrados e históricos para análises e relatórios",
+      "distractors": [
+        "Registrar as transações do dia a dia de um sistema de vendas on-line",
+        "Guardar arquivos brutos de qualquer formato, sem nenhuma estrutura",
+        "Servir dados em tempo real para o aplicativo de celular dos clientes"
+      ],
+      "explanation": "O data warehouse reúne dados de várias fontes, já limpos e modelados, e mantém o histórico para análise. Ele é otimizado para consultas analíticas, e não para muitas transações pequenas, que são o papel dos sistemas OLTP. Guardar arquivos brutos de qualquer formato descreve melhor um data lake."
+    },
+    {
+      "id": "arm-ini-05",
+      "statement": "Por que o formato Parquet é tão usado em cargas analíticas?",
+      "answer": "Ele é colunar e comprimido, permitindo ler só as colunas necessárias",
+      "distractors": [
+        "Ele é um formato de texto legível, fácil de abrir em qualquer editor",
+        "Ele guarda cada linha como um documento JSON independente e completo",
+        "Ele permite atualizar uma linha no lugar, sem reescrever o arquivo"
+      ],
+      "explanation": "O Parquet organiza os dados por coluna e aplica compressão e codificação eficientes a cada uma. Assim, uma consulta que usa três colunas de cem lê apenas essas três. Por ser binário e imutável, ele não é legível em editores de texto nem permite alterar uma linha no lugar."
+    },
+    {
+      "id": "arm-ini-06",
+      "statement": "Na arquitetura medalhão, o que normalmente fica na camada *bronze*?",
+      "answer": "Os dados brutos, como chegaram da origem, com pouca ou nenhuma transformação",
+      "distractors": [
+        "Os dados limpos, deduplicados e padronizados, prontos para a integração",
+        "As tabelas agregadas por regra de negócio, prontas para os painéis",
+        "Os dados descartados por falharem nas verificações de qualidade"
+      ],
+      "explanation": "A camada *bronze* preserva os dados da forma como chegaram, o que permite reprocessar tudo se uma regra mudar. A *silver* contém os dados limpos e padronizados, e a *gold* traz as tabelas agregadas e orientadas ao negócio. Essa progressão melhora a qualidade a cada etapa."
+    },
+    {
+      "id": "arm-ini-07",
+      "statement": "Por que é comum criar uma dimensão de data (*dim_data*) em um data warehouse?",
+      "answer": "Para oferecer atributos prontos, como mês, trimestre e feriado, sem cálculos",
+      "distractors": [
+        "Para guardar a data e a hora exata de cada carga feita no data warehouse",
+        "Para impedir que a tabela fato tenha mais de uma linha para o mesmo dia",
+        "Para substituir as colunas de data da tabela fato por textos legíveis"
+      ],
+      "explanation": "A dimensão de data tem uma linha por dia, com atributos como dia da semana, mês, trimestre, ano fiscal e indicador de feriado. Assim, analistas filtram e agrupam por esses atributos com um simples join, sem reescrever cálculos de calendário. Ela também padroniza regras como o início do ano fiscal."
+    },
+    {
+      "id": "arm-ini-08",
+      "statement": "O que é a granularidade (*grain*) de uma tabela fato?",
+      "answer": "O nível de detalhe que cada linha representa, como um item de pedido",
+      "distractors": [
+        "A quantidade máxima de linhas que a tabela fato pode armazenar",
+        "O número de dimensões ligadas diretamente à tabela fato",
+        "O intervalo de tempo entre duas cargas seguidas da tabela"
+      ],
+      "explanation": "A granularidade define o que uma linha da fato significa, por exemplo um item de pedido, um pedido inteiro ou o total diário por loja. Ela deve ser declarada antes de escolher dimensões e métricas. Misturar granularidades na mesma tabela leva a somas erradas."
+    },
+    {
+      "id": "arm-ini-09",
+      "statement": "Qual a diferença entre *schema-on-write* e *schema-on-read*?",
+      "answer": "No *schema-on-read*, a estrutura é aplicada só quando os dados são lidos",
+      "distractors": [
+        "No *schema-on-read*, os dados são validados antes de serem gravados",
+        "No *schema-on-write*, o esquema muda a cada consulta feita aos dados",
+        "Os termos indicam se o arquivo está aberto para leitura ou escrita"
+      ],
+      "explanation": "No *schema-on-write*, típico dos data warehouses, os dados precisam seguir um esquema definido no momento da carga. No *schema-on-read*, comum em data lakes, os arquivos são guardados como estão, e a estrutura é interpretada na leitura. Isso dá flexibilidade na entrada, mas transfere a responsabilidade pela qualidade para quem consome."
+    },
+    {
+      "id": "arm-ini-10",
+      "statement": "O que é um lakehouse?",
+      "answer": "Uma arquitetura que leva recursos de data warehouse, como transações, ao data lake",
+      "distractors": [
+        "Um data warehouse tradicional instalado nos servidores da própria empresa",
+        "Um data lake dividido em várias pastas, uma para cada área de negócio",
+        "Uma cópia do data warehouse mantida no data lake para fins de backup"
+      ],
+      "explanation": "O lakehouse usa o armazenamento barato do data lake e adiciona, por meio de formatos de tabela como Delta Lake e Apache Iceberg, recursos antes exclusivos do data warehouse. Entre eles estão transações ACID, controle de esquema e consultas eficientes. Assim, BI e ciência de dados podem usar a mesma cópia dos dados."
+    }
+  ],
+  "intermediario": [
+    {
+      "id": "arm-int-01",
+      "statement": "A empresa precisa saber em qual região cada cliente morava na data de cada venda, mesmo depois de mudanças de endereço. Qual tipo de SCD atende a esse requisito?",
+      "answer": "Tipo 2: uma nova linha a cada mudança, com datas de vigência",
+      "distractors": [
+        "Tipo 1: sobrescrever o atributo com o valor mais recente",
+        "Tipo 0: manter para sempre o valor do primeiro cadastro",
+        "Tipo 3: uma coluna extra com o valor imediatamente anterior"
+      ],
+      "explanation": "A SCD tipo 2 cria uma nova versão do cliente a cada mudança, com datas de início e fim de vigência e uma chave substituta própria. Cada venda aponta para a versão vigente na data dela, preservando todo o histórico. O tipo 1 apaga o passado, e o tipo 3 guarda só uma mudança anterior."
+    },
+    {
+      "id": "arm-int-02",
+      "statement": "Por que as dimensões costumam usar uma chave substituta (*surrogate key*) em vez da chave do sistema de origem?",
+      "answer": "Para permitir várias versões do mesmo registro e isolar mudanças da origem",
+      "distractors": [
+        "Para que o identificador do cliente seja legível pelas áreas de negócio",
+        "Para garantir que a dimensão nunca tenha mais linhas do que a origem",
+        "Para dispensar o join entre a tabela fato e a tabela de dimensão"
+      ],
+      "explanation": "A chave substituta é um identificador gerado no próprio data warehouse, sem significado de negócio. Ela permite que um mesmo cliente tenha várias linhas, como exige a SCD tipo 2, e protege o modelo contra reuso ou mudança de códigos na origem. Também facilita integrar fontes que usam identificadores diferentes para a mesma entidade."
+    },
+    {
+      "id": "arm-int-03",
+      "statement": "Uma tabela de eventos em um data lake é consultada quase sempre por intervalo de datas. Qual particionamento faz mais sentido?",
+      "answer": "Particionar pela data do evento, como em `dt=2024-05-01`",
+      "distractors": [
+        "Particionar pelo ID do usuário, que tem milhões de valores",
+        "Particionar pelo ID do evento, que é único em cada linha",
+        "Não particionar e guardar tudo em um único arquivo grande"
+      ],
+      "explanation": "Particionar pela coluna usada nos filtros permite que o motor leia só as pastas do intervalo pedido, técnica chamada *partition pruning*. Particionar por colunas de alta cardinalidade, como ID de usuário ou de evento, cria milhões de pastas com arquivos minúsculos e piora o desempenho. Um único arquivo obriga a ler tudo em todas as consultas."
+    },
+    {
+      "id": "arm-int-04",
+      "statement": "Um pipeline de *streaming* grava milhares de arquivos de poucos KB por hora no data lake, e as consultas ficaram lentas. Qual é a causa e a correção?",
+      "answer": "Excesso de arquivos pequenos; compactá-los periodicamente em arquivos maiores",
+      "distractors": [
+        "Arquivos grandes demais; dividir cada arquivo em partes ainda menores",
+        "Falta de índices; criar um índice em cada coluna das tabelas do lake",
+        "Compressão excessiva; gravar os arquivos em texto, sem compressão"
+      ],
+      "explanation": "Cada arquivo tem um custo fixo para listar, abrir e ler metadados, então milhares de arquivos minúsculos dominam o tempo da consulta. A solução é um processo de compactação que junta os arquivos em tamanhos maiores, na faixa de centenas de MB. Formatos de tabela como Delta Lake e Iceberg oferecem comandos próprios para isso."
+    },
+    {
+      "id": "arm-int-05",
+      "statement": "Um job corrompeu ontem uma tabela em formato Delta Lake ou Iceberg. Qual recurso desses formatos ajuda a recuperar os dados?",
+      "answer": "*Time travel*: consultar ou restaurar uma versão anterior da tabela",
+      "distractors": [
+        "*Partition pruning*: ler apenas as partições afetadas pelo erro",
+        "*Schema evolution*: aceitar colunas novas sem reescrever a tabela",
+        "*Z-ordering*: reorganizar os dados para acelerar as consultas"
+      ],
+      "explanation": "Esses formatos mantêm um log de transações com os arquivos que compõem cada versão da tabela. Com isso, é possível consultar a tabela como estava em uma versão ou data anterior e restaurá-la. Isso só funciona enquanto os arquivos antigos não forem removidos pela rotina de limpeza."
+    },
+    {
+      "id": "arm-int-06",
+      "statement": "Em que situação normalizar uma dimensão no formato *snowflake* pode valer a pena?",
+      "answer": "Quando a dimensão é enorme e tem hierarquias com muita repetição",
+      "distractors": [
+        "Quando os analistas precisam escrever consultas com menos joins",
+        "Quando a tabela fato precisa de mais métricas numéricas por linha",
+        "Quando a dimensão é pequena e raramente sofre qualquer alteração"
+      ],
+      "explanation": "Normalizar uma dimensão, como separar produto, subcategoria e categoria, reduz a repetição de atributos e facilita manter hierarquias muito grandes. O custo é exigir mais joins e deixar as consultas mais complexas. Por isso, a recomendação geral de Kimball é preferir a estrela e normalizar só quando há um ganho claro."
+    },
+    {
+      "id": "arm-int-07",
+      "statement": "Para trafegar eventos individuais em um sistema de mensageria com evolução de esquema, qual formato costuma ser mais adequado?",
+      "answer": "Avro, orientado a linhas e com esquema que pode evoluir",
+      "distractors": [
+        "Parquet, orientado a colunas e otimizado para lotes",
+        "CSV, por ser simples, legível e aceito em qualquer lugar",
+        "ORC, colunar e com índices leves para consultas analíticas"
+      ],
+      "explanation": "O Avro grava registro a registro, o que combina com mensagens individuais, e tem regras claras de compatibilidade para evoluir o esquema. Formatos colunares como Parquet e ORC são ótimos para ler grandes volumes de poucas colunas, mas são pensados para arquivos em lote. O CSV não carrega tipos nem esquema, o que dificulta uma evolução segura."
+    },
+    {
+      "id": "arm-int-08",
+      "statement": "Você precisa acompanhar o saldo de estoque de cada produto ao fim de cada dia. Que tipo de tabela fato é mais adequado?",
+      "answer": "Fato de *snapshot* periódico, com uma linha por produto por dia",
+      "distractors": [
+        "Fato transacional, com uma linha por movimentação de estoque",
+        "Fato sem métricas (*factless*), com uma linha por produto",
+        "Fato de *snapshot* acumulado, com uma linha por pedido"
+      ],
+      "explanation": "O *snapshot* periódico registra o estado de algo em intervalos regulares, ideal para saldos como estoque ou conta bancária. Uma fato transacional guarda cada movimentação, e calcular o saldo diário exigiria somar todo o histórico. O *snapshot* acumulado acompanha processos com etapas definidas, como o ciclo de um pedido."
+    },
+    {
+      "id": "arm-int-09",
+      "statement": "Por que não faz sentido somar o saldo bancário de uma tabela de *snapshot* diário ao longo dos dias de um mês?",
+      "answer": "O saldo é semiaditivo: soma entre contas, mas não ao longo do tempo",
+      "distractors": [
+        "O saldo é não aditivo: não pode ser somado em nenhuma dimensão",
+        "O saldo é aditivo, mas a soma exige convertê-lo para inteiros",
+        "O saldo é derivado, então deve ser recalculado na camada de BI"
+      ],
+      "explanation": "Somar os saldos de 30 dias conta o mesmo dinheiro repetidas vezes, então ao longo do tempo usa-se o último saldo ou a média. Entre contas ou agências, porém, a soma faz sentido, por isso a métrica é chamada de semiaditiva. Métricas não aditivas, como percentuais, não podem ser somadas em nenhuma dimensão."
+    },
+    {
+      "id": "arm-int-10",
+      "statement": "Por que é difícil fazer um `UPDATE` ou `MERGE` confiável sobre arquivos Parquet puros em um data lake, sem um formato de tabela como Delta Lake ou Iceberg?",
+      "answer": "Não há log de transações para tornar atômica a troca dos arquivos alterados",
+      "distractors": [
+        "O Parquet não aceita colunas numéricas com casas decimais de precisão",
+        "O armazenamento de objetos não permite apagar arquivos já gravados",
+        "O Parquet só pode ser lido por um único motor de consulta por vez"
+      ],
+      "explanation": "Arquivos Parquet são imutáveis, então um `UPDATE` precisa reescrever arquivos inteiros e trocá-los. Sem um log de transações, um leitor pode ver parte dos arquivos novos e parte dos antigos, e uma falha no meio pode deixar a tabela inconsistente. Delta Lake e Iceberg registram cada versão em um log, tornando essas operações atômicas."
+    }
+  ]
+}
