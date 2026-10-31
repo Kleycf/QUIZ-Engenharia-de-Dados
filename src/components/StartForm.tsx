@@ -18,7 +18,7 @@ const THEME_CHOICES: { value: ThemeChoice; label: string }[] = [
 ];
 
 const choiceCard =
-  "flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 transition-colors " +
+  "flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border border-control-border bg-card px-4 py-3 transition-colors " +
   "hover:border-accent has-[:checked]:border-accent has-[:checked]:bg-accent-soft has-[:checked]:font-medium " +
   "has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus";
 
@@ -91,7 +91,7 @@ export function StartForm() {
           onBlur={() => setTouched(true)}
           aria-invalid={showNameError ? true : undefined}
           aria-describedby={`${nameId}-hint${showNameError ? ` ${nameId}-error` : ""}`}
-          className="block min-h-11 w-full rounded-lg border border-border bg-card px-4 py-2 text-base aria-[invalid=true]:border-danger-border"
+          className="block min-h-11 w-full rounded-lg border border-control-border bg-card px-4 py-2 text-base aria-[invalid=true]:border-danger-border"
         />
         <p id={`${nameId}-hint`} className="text-sm text-muted">
           De {PLAYER_NAME_MIN} a {PLAYER_NAME_MAX} caracteres. Ele aparece no ranking.

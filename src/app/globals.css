@@ -3,6 +3,7 @@
 /*
  * Tokens semânticos. Claro/escuro segue só prefers-color-scheme (RNF06).
  * Contraste AA: texto ≥ 4.5:1 sobre background e card; bordas de estado ≥ 3:1.
+ * --border é decorativo (cards); controles interativos usam --control-border (≥ 3:1, WCAG 1.4.11).
  */
 :root {
   --background: #f8fafc;
@@ -10,6 +11,7 @@
   --muted: #475569;
   --card: #ffffff;
   --border: #cbd5e1;
+  --control-border: #64748b;
   --code: #f1f5f9;
   --accent: #4338ca;
   --accent-foreground: #ffffff;
@@ -30,6 +32,7 @@
     --muted: #cbd5e1;
     --card: #1e293b;
     --border: #475569;
+    --control-border: #94a3b8;
     --code: #0f172a;
     --accent: #a5b4fc;
     --accent-foreground: #1e1b4b;
@@ -50,6 +53,7 @@
   --color-muted: var(--muted);
   --color-card: var(--card);
   --color-border: var(--border);
+  --color-control-border: var(--control-border);
   --color-code: var(--code);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);

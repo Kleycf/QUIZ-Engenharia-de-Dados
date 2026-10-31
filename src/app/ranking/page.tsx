@@ -134,7 +134,7 @@ function OwnPosition({ entry }: { entry: PublicRankingEntry }) {
 
 function RankingFilters({ query }: { query: RankingQuery }) {
   const select =
-    "block min-h-11 w-full rounded-lg border border-border bg-card px-3 py-2 text-base";
+    "block min-h-11 w-full rounded-lg border border-control-border bg-card px-3 py-2 text-base";
   return (
     <form method="get" action="/ranking" className="grid gap-3 rounded-xl border border-border bg-card p-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
       <label className="space-y-1">

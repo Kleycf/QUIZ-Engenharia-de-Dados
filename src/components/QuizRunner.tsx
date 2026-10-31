@@ -11,7 +11,7 @@ import type { GradedAnswer, PublicQuestion, RevealedAnswer, SessionState } from 
 type OptionState = "idle" | "selected" | "correct" | "incorrect" | "neutral";
 
 const OPTION_STYLES: Record<OptionState, string> = {
-  idle: "border-border bg-card hover:border-accent cursor-pointer",
+  idle: "border-control-border bg-card hover:border-accent cursor-pointer",
   selected: "border-accent bg-accent-soft ring-2 ring-accent cursor-pointer",
   correct: "border-success-border bg-success-soft",
   incorrect: "border-danger-border bg-danger-soft",
@@ -245,7 +245,7 @@ export function QuizRunner({ initial }: { initial: SessionState }) {
                   <InlineText text={correctOption.text} />
                 </p>
               )}
-              <h3 className="font-semibold">Por que esta é a resposta correta?</h3>
+              <h2 className="font-semibold">Por que esta é a resposta correta?</h2>
               <RichText text={answer.explanation} className="leading-relaxed" />
             </div>
           )}
