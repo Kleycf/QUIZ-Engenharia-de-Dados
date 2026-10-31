@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useId, useState, useSyncExternalStore } from "react";
+import { useId, useState, useSyncExternalStore, useTransition } from "react";
 import { ApiClientError, apiFetch } from "@/lib/client/api";
 import { ALL_THEMES, LEVELS, THEMES, type Level, type Theme } from "@/lib/quiz/domain";
 import { ALL_THEMES_LABEL, LEVEL_LABELS, THEME_LABELS } from "@/lib/labels";
@@ -43,35 +43,38 @@ export function StartForm() {
   const [touched, setTouched] = useState(false);
   const [theme, setTheme] = useState<ThemeChoice>(ALL_THEMES);
   const [level, setLevel] = useState<Level>("iniciante");
-  const [submitting, setSubmitting] = useState(false);
+  // Transição: fica pendente durante a chamada e a navegação, e volta sozinha ao terminar. Um booleano
+  // manual ficaria preso em true, porque o Next 16 preserva a página anterior (<Activity>) ao voltar para ela.
+  const [submitting, startSubmit] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
   const parsed = playerNameSchema.safeParse(name);
   const nameError = parsed.success ? null : (parsed.error.issues[0]?.message ?? null);
   const showNameError = touched && name.length > 0 && nameError;
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setTouched(true);
     if (!parsed.success || submitting) return;
+    const playerName = parsed.data;
 
-    setSubmitting(true);
     setError(null);
-    try {
-      const { sessionId } = await apiFetch<{ sessionId: string }>("/api/sessions", {
-        method: "POST",
-        body: { playerName: parsed.data, theme: theme === ALL_THEMES ? null : theme, level },
-      });
+    startSubmit(async () => {
       try {
-        localStorage.setItem(LAST_NAME_KEY, parsed.data);
-      } catch {
-        // sem persistência: tudo bem
+        const { sessionId } = await apiFetch<{ sessionId: string }>("/api/sessions", {
+          method: "POST",
+          body: { playerName, theme: theme === ALL_THEMES ? null : theme, level },
+        });
+        try {
+          localStorage.setItem(LAST_NAME_KEY, playerName);
+        } catch {
+          // sem persistência: tudo bem
+        }
+        router.push(`/quiz/${sessionId}`);
+      } catch (e) {
+        setError(e instanceof ApiClientError ? e.message : "Não foi possível começar a rodada. Tente novamente.");
       }
-      router.push(`/quiz/${sessionId}`);
-    } catch (e) {
-      setError(e instanceof ApiClientError ? e.message : "Não foi possível começar a rodada. Tente novamente.");
-      setSubmitting(false);
-    }
+    });
   }
 
   return (

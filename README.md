@@ -50,7 +50,7 @@ Next.js 16 (App Router) · TypeScript · Tailwind CSS · Supabase (Postgres) · 
 | `npm run typecheck` | Gera os tipos de rota do Next e roda o `tsc` |
 | `npm test` | Testes unitários e de integridade do seed (Vitest) |
 | `npm run db:seed` | Gera `supabase/seed.sql` a partir de `supabase/questions/*.json` |
-| `npm run test:e2e` | Testes E2E (Playwright, porta 3100) |
+| `npm run test:e2e` | Testes E2E (Playwright) contra o build de produção na porta 3100. Usa o Supabase do `.env.local` e apaga as rodadas que cria |
 
 Antes do primeiro `npm run test:e2e` numa máquina nova, instale o navegador:
 

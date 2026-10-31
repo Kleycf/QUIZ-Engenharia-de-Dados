@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { InlineText, RichText } from "@/components/RichText";
 import { ApiClientError, apiFetch } from "@/lib/client/api";
 import { optionLetter } from "@/lib/format";
@@ -34,7 +34,10 @@ export function QuizRunner({ initial }: { initial: SessionState }) {
     return firstOpen === -1 ? questions.length - 1 : firstOpen;
   });
   const [selected, setSelected] = useState<number | null>(null);
-  const [busy, setBusy] = useState<"answer" | "finish" | null>(null);
+  const [answering, setAnswering] = useState(false);
+  // Concluir navega para o resultado: como transição, o "ocupado" volta sozinho se a página for restaurada.
+  const [finishing, startFinish] = useTransition();
+  const busy = answering ? "answer" : finishing ? "finish" : null;
   const [error, setError] = useState<string | null>(null);
 
   const headingRef = useRef<HTMLDivElement>(null);
@@ -48,7 +51,7 @@ export function QuizRunner({ initial }: { initial: SessionState }) {
 
   async function confirm() {
     if (selected === null || answer || busy) return;
-    setBusy("answer");
+    setAnswering(true);
     setError(null);
     try {
       const graded = await apiFetch<GradedAnswer>(`/api/sessions/${session.id}/answers`, {
@@ -69,26 +72,26 @@ export function QuizRunner({ initial }: { initial: SessionState }) {
         setError(e instanceof ApiClientError ? e.message : "Não foi possível enviar sua resposta. Tente novamente.");
       }
     } finally {
-      setBusy(null);
+      setAnswering(false);
     }
   }
 
-  async function finish() {
-    setBusy("finish");
+  function finish() {
     setError(null);
-    try {
-      await apiFetch(`/api/sessions/${session.id}/finish`, { method: "POST" });
-      router.push(`/resultado/${session.id}`);
-    } catch (e) {
-      setError(e instanceof ApiClientError ? e.message : "Não foi possível concluir a rodada. Tente novamente.");
-      setBusy(null);
-    }
+    startFinish(async () => {
+      try {
+        await apiFetch(`/api/sessions/${session.id}/finish`, { method: "POST" });
+        router.push(`/resultado/${session.id}`);
+      } catch (e) {
+        setError(e instanceof ApiClientError ? e.message : "Não foi possível concluir a rodada. Tente novamente.");
+      }
+    });
   }
 
   function next() {
     if (!answer || busy) return;
     if (allAnswered) {
-      void finish();
+      finish();
       return;
     }
     const nextOpen = questions.findIndex((q) => !answers[q.id]);

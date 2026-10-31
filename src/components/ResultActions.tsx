@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { ApiClientError, apiFetch } from "@/lib/client/api";
 import { ALL_THEMES, type Level, type Theme } from "@/lib/quiz/domain";
 
@@ -23,22 +23,26 @@ const secondary =
 /** RF18: Jogar novamente, Refazer só as erradas, Ver ranking e Início. */
 export function ResultActions({ sessionId, playerName, theme, level, isRetry, wrongCount }: Props) {
   const router = useRouter();
-  const [busy, setBusy] = useState<"again" | "retry" | null>(null);
+  // "Ocupado" deriva da transição (chamada + navegação), então nunca fica preso ao voltar para esta página.
+  const [pending, startAction] = useTransition();
+  const [lastAction, setLastAction] = useState<"again" | "retry" | null>(null);
+  const busy = pending ? lastAction : null;
   const [error, setError] = useState<string | null>(null);
 
-  async function start(kind: "again" | "retry") {
-    setBusy(kind);
+  function start(kind: "again" | "retry") {
+    setLastAction(kind);
     setError(null);
-    try {
-      const { sessionId: next } = await apiFetch<{ sessionId: string }>("/api/sessions", {
-        method: "POST",
-        body: { playerName, theme, level, ...(kind === "retry" ? { retryOf: sessionId } : {}) },
-      });
-      router.push(`/quiz/${next}`);
-    } catch (e) {
-      setError(e instanceof ApiClientError ? e.message : "Não foi possível começar a rodada. Tente novamente.");
-      setBusy(null);
-    }
+    startAction(async () => {
+      try {
+        const { sessionId: next } = await apiFetch<{ sessionId: string }>("/api/sessions", {
+          method: "POST",
+          body: { playerName, theme, level, ...(kind === "retry" ? { retryOf: sessionId } : {}) },
+        });
+        router.push(`/quiz/${next}`);
+      } catch (e) {
+        setError(e instanceof ApiClientError ? e.message : "Não foi possível começar a rodada. Tente novamente.");
+      }
+    });
   }
 
   const rankingHref = `/ranking?theme=${theme ?? ALL_THEMES}&level=${level}${isRetry ? "" : `&sessionId=${sessionId}`}`;
